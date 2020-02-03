@@ -14,6 +14,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Scanner;
 
 public class ActionsClass {
+
     public static void deleteFolderAndItsContent(final Path folder) throws IOException {
         Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
             @Override
@@ -89,15 +90,6 @@ public class ActionsClass {
         }catch(Exception e){
             e.printStackTrace();
         }
-    }
-
-    public void runCommandRealTimeLog(String commandString, TextArea outputArea) {
-        CommandExecutor commandExecutor = new CommandExecutor(
-                commandString,
-                outputArea
-        );
-
-        commandExecutor.run();
     }
 
 }

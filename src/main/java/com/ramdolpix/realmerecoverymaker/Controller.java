@@ -8,7 +8,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import net.lingala.zip4j.ZipFile;
-import net.lingala.zip4j.exception.ZipException;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +26,6 @@ public class Controller {
     static Path tempFolder;      //tempFolder
     String unpackedFilesFolder;
     String unpackedSystemFolder;
-    String tempFolderAbsolutePath; //use this string if u use CommandExecutor
-    //if you'll use tempFolder.toString with CommandExecutor you'll get Exception Error
     {
         try {
             ActionsClass action = new ActionsClass();
@@ -39,14 +36,12 @@ public class Controller {
             action.getFileFromResource("tools/python/ofp_libextract.py",tempFolder.toString() + "/ofp_libextract.py");
             action.getFileFromResource("tools/python/sdat2img.py",tempFolder.toString() + "/sdat2img.py");
 
-            action.getFileFromResource("tools/imgext.exe",tempFolder.toString() + "/imgext.exe");
+            action.getFileFromResource("tools/ImgExtractor.exe",tempFolder.toString() + "/ImgExtractor.exe");
             action.getFileFromResource("tools/bsdiff.exe",tempFolder.toString() + "/bsdiff.exe");
             action.getFileFromResource("tools/bspatch.exe",tempFolder.toString() + "/bspatch.exe");
             action.getFileFromResource("tools/brotli.exe",tempFolder.toString() + "/brotli.exe");
             File folderWithFiles = new File(tempFolder.toString() + "/unpackedFiles");
             File unpackedSystem = new File(tempFolder.toString() + "/unpackedSystem");
-            File file = new File(String.valueOf(tempFolder));
-            tempFolderAbsolutePath = file.getAbsolutePath();
             folderWithFiles.mkdir();
             unpackedSystem.mkdir();
             System.out.println("Tools was unpacked!");
@@ -76,7 +71,7 @@ public class Controller {
                 try {
                     logField.clear();
                     logField.appendText("Converting oZip to Zip..." + "\n");
-                    logField.appendText(action.runCommand("python " + tempFolder + "/ozipdecrypt.py " + path2OZipFile));
+                    logField.appendText(action.runCommand("python " + tempFolder.toString() + "/ozipdecrypt.py " + path2OZipFile));
                     logField.appendText("Moving .zip to Temp folder..." + "\n");
                     action.moveFile(pathZipFile,tempFolder.toString() + "/firm.zip");
                     logField.appendText("Done!" + "\n");
@@ -91,7 +86,7 @@ public class Controller {
                     logField.appendText("Converting .dat to .img...");
                     logField.appendText(action.runCommand("python " + tempFolder.toString() + "/sdat2img.py " + unpackedFilesFolder + "/system.transfer.list " + unpackedFilesFolder + "/system.new.dat " + unpackedFilesFolder + "/system.img"));
                     logField.appendText("Unpacking system.img...");
-                    logField.appendText(action.runCommand(tempFolder.toString() + "/imgext.exe " + unpackedFilesFolder + "/system.img " + unpackedSystemFolder));
+                    logField.appendText(action.runCommand(tempFolder.toString() + "/ImgExtractor.exe " + unpackedFilesFolder + "/system.img "  + unpackedSystemFolder));
                     logField.appendText("Done!" + "\n");
                     logField.appendText("Moving recovery-from-boot.p...");
                     action.moveFile(unpackedSystemFolder + "/system/recovery-from-boot.p",unpackedFilesFolder + "/recovery-from-boot.p");
